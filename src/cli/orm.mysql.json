@@ -1,0 +1,17 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "root",
+    "database": "location_db",
+    "migrationsTableName": "migrations",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "migrations": [
+        "migrations/*{.ts,.js}"
+    ],
+    "cli": {
+        "migrationsDir":  "migrations"
+    },
+    "synchronize": true
+}
