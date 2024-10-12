@@ -49,3 +49,6 @@ $ npm run build
 $ docker-compose --env-file .env up -d
 
 ```
+
+## Demo
+open http://localhost:3000/docs to access api document
