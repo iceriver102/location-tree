@@ -1,0 +1,22 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    network_mode: host
+    volumes:
+      - progresDB:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  app:
+    build: ./
+    container_name: location-nestjs
+    network_mode: host
+    env_file:
+      - .env
+
+volumes:
+  progresDB:
