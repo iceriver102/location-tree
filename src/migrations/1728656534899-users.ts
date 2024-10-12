@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { dbEntityId } from "~core/utils/database-config";
 
 export class Users1728656534899 implements MigrationInterface {
 
@@ -9,10 +10,8 @@ export class Users1728656534899 implements MigrationInterface {
                 columns: [
                     {
                         name: 'id',
-                        type: 'varchar',
+                        ...dbEntityId(),
                         isPrimary: true,
-                        isGenerated: true,
-                        length: '40',
                     },
                     {
                         name: 'email',
@@ -28,8 +27,8 @@ export class Users1728656534899 implements MigrationInterface {
                     },
                     {
                         name: 'createTime',
-                        type: 'datetime',
-                        isNullable: true,
+                        type: 'timestamp',
+                        default: "CURRENT_TIMESTAMP"
                     },
                 ],
             }),

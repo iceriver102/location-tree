@@ -1,3 +1,4 @@
+import { LogLevel } from '@nestjs/common';
 import { hash, genSalt, compare } from 'bcrypt';
 
 import { Duplex } from 'stream';
@@ -44,4 +45,13 @@ export const bcrypt = {
 };
 export function round(v: number) {
     return ((Number.EPSILON + v) * 1e2) / 1e2;
+}
+
+export function logLevels(systemLogLevels?: string) {
+    const allLogLevels: LogLevel[] = ['verbose', 'debug', 'log', 'warn', 'error', 'fatal'];
+    const levels = allLogLevels.slice(
+        allLogLevels.indexOf((systemLogLevels || 'debug') as LogLevel),
+        allLogLevels.length,
+    );
+    return levels;
 }

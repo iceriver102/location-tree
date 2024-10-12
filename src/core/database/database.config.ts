@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { config } from '~config/database.config';
+import { parseConfig } from '~core/utils/database-config';
 
 @Injectable()
 export class DatabaseConfig implements TypeOrmOptionsFactory {
-    createTypeOrmOptions(connectionName?: string): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
-        return config;
+    createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
+        const commonConfig: any = {
+            maxQueryExecutionTime: 10240,
+            pool: {
+                max: 512,
+            },
+            poolSize: 256,
+            extra: {
+                connectionLimit: 512,
+            },
+        };
+        return { ...commonConfig, ...parseConfig() };
     }
- 
+
 }

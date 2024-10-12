@@ -11,12 +11,12 @@ import {
 import { Serialize } from '~core/interceptors/serialize.interceptor';
 import { CurrentUser } from '~core/decorators/current-user.decorator';
 import { AuthGuard } from '~core/guards/auth.guard';
-import { Public } from '~core/decorators/public.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LocationService } from './services/location.service';
 import { LocationDTO } from './dtos/location.dto';
 import { CreateLocationDTO } from './dtos/create-location.dto';
 import { UpdateLocationDto } from './dtos/update-location.dto';
+import { User } from '~modules/users/user.entity';
 
 @ApiTags('Locations')
 @Controller('locations')
@@ -26,26 +26,26 @@ export class LocationsController {
     constructor(
         private locationService: LocationService,
     ) { }
-    @Post("/")
+    @Post("/addNode")
     @Serialize(LocationDTO)
-    public async create(@Body() body: CreateLocationDTO) {
-        return this.locationService.create(body, body.parentId)
+    public async create(@Body() body: CreateLocationDTO, @CurrentUser() user: User) {
+        return this.locationService.create(body, user, body.parentId)
     }
 
-    @Get("/")
-    @Public()
+    @Get("/tree")
     @Serialize(LocationDTO)
-    public async getTree() {
-        return this.locationService.findAll();
+    public async getTree(@CurrentUser() user: User) {
+        return this.locationService.findAll(user);
     }
 
-    @Patch("/:id")
-    public async updateNode(@Param("id") id:string,@Body() body:UpdateLocationDto) {
-        return this.locationService.updateNode(id, body);
+    @Patch("/node/:id")
+    public async updateNode(@Param("id") id:string, @Body() body:UpdateLocationDto, @CurrentUser() user: User) {
+        return this.locationService.updateNode(id, body, user);
     }
 
 
-    @Delete("/:id")
+    @Delete("/node/:id")
+    @Serialize(LocationDTO)
     public async deleteNode(@Param("id") id:string) {
         return this.locationService.remove(id);
     }

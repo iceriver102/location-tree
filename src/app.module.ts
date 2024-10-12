@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from '~core/database/database.module';
@@ -7,12 +7,13 @@ import { UsersModule } from '~modules/users/users.module';
 import { AuthGuard } from '~core/guards/auth.guard';
 import { LocationModule } from '~modules/locations/location.module';
 import { HttpExceptionFilter } from '~core/interceptors/http-exception.filter';
+import { LoggerMiddleware } from '~core/logger/logger.middleware';
+import { CustomLogger } from '~core/logger';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`,
       expandVariables: true,
       load: [appConfig],
     }),
@@ -21,6 +22,7 @@ import { HttpExceptionFilter } from '~core/interceptors/http-exception.filter';
     LocationModule
   ],
   providers: [
+    CustomLogger,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
@@ -29,6 +31,9 @@ import { HttpExceptionFilter } from '~core/interceptors/http-exception.filter';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
+        transformOptions:{
+          exposeDefaultValues: true,
+        }
       }),
     },
    {
@@ -38,5 +43,8 @@ import { HttpExceptionFilter } from '~core/interceptors/http-exception.filter';
   ],
 })
 export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
 
 }

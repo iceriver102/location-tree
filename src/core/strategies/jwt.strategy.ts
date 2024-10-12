@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -24,8 +24,7 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
     }
     async validate(payload: AuthPayload): Promise<AuthPayload> {
         if (payload == null) {
-            throw new HttpException('server.unauthorized', HttpStatus.UNAUTHORIZED);
-
+            throw new UnauthorizedException("the user is not login");
         }
         return this.userService.findById(payload.id);
 

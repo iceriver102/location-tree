@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { dbEntityId } from "~core/utils/database-config";
 
 export class LocationsClosure1728668422951 implements MigrationInterface {
 
@@ -9,14 +10,14 @@ export class LocationsClosure1728668422951 implements MigrationInterface {
                 columns: [
                     {
                         name: 'ancestor_id',
-                        type: 'varchar',
-                        length: '40',
+                        ...dbEntityId(),
+                        default: undefined,
                         isPrimary: true,
                     },
                     {
                         name: 'descendant_id',
-                        type: 'varchar',
-                        length: '40',
+                        ...dbEntityId(),
+                        default: undefined,
                         isPrimary: true,
                     },
                 ],
@@ -25,13 +26,17 @@ export class LocationsClosure1728668422951 implements MigrationInterface {
                         columnNames: ["ancestor_id"],
                         name: "frk-location-closure-ancestor-id",
                         referencedTableName: "tbl_locations",
-                        referencedColumnNames: ["id"]
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                        onUpdate: "CASCADE"
                     },
                     {
                         columnNames: ["descendant_id"],
                         name: "frk-location-closure-descendant-id",
                         referencedTableName: "tbl_locations",
-                        referencedColumnNames: ["id"]
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                        onUpdate: "CASCADE"
                     }
                 ]
             })
