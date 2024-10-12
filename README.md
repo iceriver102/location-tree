@@ -36,15 +36,16 @@ $ yarn start:dev
 $ yarn start:prod
 ```
 
-## Test
+## Build App
 
 ```bash
-# unit tests
-$ npm run test
+# copy file env
+$ cp .example.env .env
 
-# e2e tests
-$ npm run test:e2e
+# build app
+$ npm run build
 
-# test coverage
-$ npm run test:cov
+# run app
+$ docker-compose --env-file .env up -d
+
 ```

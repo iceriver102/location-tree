@@ -8,8 +8,8 @@ export const dbEntityId = () => {
     return { type: "varchar(40)" }
 }
 
-const toLogLevels=(option:string):LogLevel[]=>{
-    if(option==null){
+const toLogLevels = (option: string): LogLevel[] => {
+    if (option == null) {
         return ["migration"]
     }
     const levels = option.split(",")
@@ -29,22 +29,24 @@ export const parseConfig = (): DataSourceOptions => {
             migrations: [
                 "dist/migrations/*{.ts,.js}"
             ],
-            logging: toLogLevels(process.env.DATABASE_LOG)
+            logging: toLogLevels(process.env.DATABASE_LOG),
+            migrationsRun:process.env.DATABASE_SYNC == "1",
         }
     }
     const config: DataSourceOptions = {
         type: typeDatabase,
         host: process.env.DATABASE_HOST || "localhost",
         port: parseInt(process.env.DATABASE_PORT || typeDatabase == "postgres" ? "5432" : "3306", 10),
-        username: process.env.DATABASE_USER || "root",
+        username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         migrationsTableName: "migrations",
+        migrationsRun:process.env.DATABASE_SYNC == "1",
         entities: [
             "dist/**/*.entity{.ts,.js}"
         ],
         migrations: [
-            "dist/migrations/*{.ts,.js}"
+            "dist/migrations/*.js"
         ],
         logging: toLogLevels(process.env.DATABASE_LOG)
     }

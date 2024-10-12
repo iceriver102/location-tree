@@ -1,4 +1,4 @@
-FROM node:20.18.0-alpine
+FROM node:20.18.0
 ARG NODE_ENV=production
 ENV NODE_ENV=production
 WORKDIR /usr/src/app

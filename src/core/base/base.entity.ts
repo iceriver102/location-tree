@@ -4,11 +4,11 @@ import { Expose } from 'class-transformer';
 
 export class BaseEntity extends TypeormEntity {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     @Expose()
     id: EntityId;
 
-    @CreateDateColumn({ default: "CURRENT_TIMESTAMP" })
+    @CreateDateColumn()
     createTime: Date;
 
 
