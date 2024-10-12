@@ -6,18 +6,13 @@ export class LocationAlt1728718842574 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.addColumns(
             "tbl_locations",
-            [new TableColumn({
-                name: 'createById',
-                ...dbEntityId(),
-                isNullable: true,
-                default: undefined
-            }),
-
+            [
             new TableColumn({
                 name: "locationNumber",
                 type: 'varchar',
                 length: '10',
-                isNullable: false
+                isNullable: false,
+                isUnique: true
             }),
 
             new TableColumn({
@@ -32,22 +27,6 @@ export class LocationAlt1728718842574 implements MigrationInterface {
                 isNullable: true
             })
             ]
-        );
-
-        await queryRunner.createForeignKey(
-            'tbl_locations',
-            new TableForeignKey({
-                referencedColumnNames: ["id"],
-                referencedTableName: "tbl_users",
-                columnNames: ["createById"],
-                name: "frk-locations-users-createBy"
-            })
-        );
-
-
-        await queryRunner.createIndex(
-            'tbl_locations',
-            new TableIndex({ name: "uq-locations-users-locationNumber", columnNames: ["createById", "locationNumber"], isUnique: true })
         );
     }
 

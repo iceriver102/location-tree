@@ -1,5 +1,4 @@
 import { Expose, Type } from 'class-transformer';
-import { User } from '~modules/users/user.entity';
 
 export class LocationDTO {
     @Expose()
@@ -29,7 +28,4 @@ export class LocationDTO {
     parent: LocationDTO;
 
 
-    @Expose()
-    @Type(() => User)
-    createBy?: User;
 }
