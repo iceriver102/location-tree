@@ -28,6 +28,12 @@ export class LocationService extends BaseService<Location> {
             const parentLoc = await this.findById(dto.parentId);
             if (parentLoc == null) {
                 throw new BadRequestException("the parent location is not found")
+                
+            }
+            const branch = await this.database.locations.findDescendants(node);
+            const invalidFlag = branch.some(ele=>ele.id == dto.parentId);
+            if(invalidFlag){
+                throw new BadRequestException("The parent id invalid");
             }
             loc.parent = parentLoc;
         }
