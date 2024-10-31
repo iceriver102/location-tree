@@ -17,24 +17,10 @@ export class LocationService extends BaseService<Location> {
         if (node == null) {
             throw new NotFoundException("the location is not found")
         }
-        if (dto.locationNumber != undefined && node.locationNumber != dto.locationNumber) {
-            const countNode = await this.repo.count({ where: { locationNumber: dto.locationNumber, id: Not(Equal(id)) } })
-            if (countNode > 0) {
-                throw new BadRequestException("Location number is exist")
-            }
-        }
+        
         const loc = plainToInstance(Location, dto, { excludeExtraneousValues: true, exposeUnsetFields: false });
         if (dto.parentId != node.parent?.id) {
             const parentLoc = await this.findById(dto.parentId);
-            if (parentLoc == null) {
-                throw new BadRequestException("the parent location is not found")
-                
-            }
-            const branch = await this.database.locations.findDescendants(node);
-            const invalidFlag = branch.some(ele=>ele.id == dto.parentId);
-            if(invalidFlag){
-                throw new BadRequestException("The parent id invalid");
-            }
             loc.parent = parentLoc;
         }
         return this.database.locations.update(id, loc)

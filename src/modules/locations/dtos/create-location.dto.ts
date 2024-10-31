@@ -1,13 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { IsNumber, IsOptional, IsString, MaxLength, ValidateIf } from "class-validator";
+import { IsNumber, IsOptional, IsString, MaxLength, IsUUID } from "class-validator";
 import { LocationIdExist } from "../validators/location-id.not-exist";
 import { LocationNumberDuplicate } from "../validators/location-number.duplicate";
 
 export class CreateLocationDTO {
     @Expose()
     @IsOptional()
-    @IsString()
+    @IsUUID()
     @LocationIdExist({message:"Location parent not exist"})
     @ApiProperty({type:"string", required: false, description:"The node's parent if it not set this is root node"})
     parentId?: string;
@@ -19,7 +19,7 @@ export class CreateLocationDTO {
 
     @Expose()
     @IsString()
-    @ApiProperty({type:"string", required: true, description:"Level of location"})
+    @ApiProperty({type:"string", required: true, description:"Level of location "})
     level: string;
 
     @Expose()

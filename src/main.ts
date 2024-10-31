@@ -5,9 +5,11 @@ import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/sw
 import { useContainer } from 'class-validator';
 import { config } from 'dotenv';
 import { logLevels } from '~core/utils';
+import { ContextInterceptor } from '~core/interceptors/context.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: logLevels(process.env.APP_LOG_LEVEL) });
+  app.useGlobalInterceptors(new ContextInterceptor());
   const configService = app.get(ConfigService);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

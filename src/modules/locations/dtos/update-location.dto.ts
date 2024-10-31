@@ -1,12 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator";
+import { ContextAwareDto } from "~core/base/context-aware";
+import { LocationNumberDuplicate } from "../validators/location-number.duplicate";
+import { LocationIdExist } from "../validators/location-id.not-exist";
+import { LocationParentInvalid } from "../validators/location-parent.loop-tree";
 
-export class UpdateLocationDto {
+export class UpdateLocationDto extends ContextAwareDto {
     @Expose()
     @IsOptional()
-    @IsString()
+    @IsUUID()
     @ApiProperty({type:"string", required: false, description:"The node's parent if it not set this is root node"})
+    @LocationIdExist({message:"Location parent not exist"})
+    @LocationParentInvalid()
     parentId?: string;
 
     @IsOptional()
@@ -24,7 +30,7 @@ export class UpdateLocationDto {
     @Expose()
     @IsOptional()
     @IsString()
-    
+    @LocationNumberDuplicate()
     @ApiProperty({type:"string", required: false, description:"Number of location"})
     @MaxLength(10, { message: "Location Building too long" })
     locationNumber?: string;

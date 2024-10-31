@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from '~core/database/database.module';
 import { appConfig } from '~config';
@@ -24,15 +24,15 @@ import { CustomLogger } from '~core/logger';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
-        transformOptions:{
+        transformOptions: {
           exposeDefaultValues: true,
         }
       }),
     },
-   {
-    provide: APP_FILTER,
-    useClass: HttpExceptionFilter,
-   }
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    }
   ],
 })
 export class AppModule {

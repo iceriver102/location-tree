@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { ContextAwareDto } from '~core/base/context-aware';
 
 export class LocationDTO {
     @Expose()
